@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
+import InstitutionDetailsComponent from "../components/InstitutionDetailsComponent";
 
 const page = () => {
-  return (
-    <div>page</div>
-  )
-}
+  return <InstitutionDetailsComponent />;
+};
 
-export default page
+export default page;
