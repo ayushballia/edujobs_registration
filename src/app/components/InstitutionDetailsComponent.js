@@ -9,6 +9,7 @@ import {
   setSelectedInstitutionType,
   setSelectedSchoolName,
   setSchoolBoard,
+  setEmployeesNumber
 } from "@/app/libs/store/features/institutionDetails/institutionDetailsSlice";
 import Image from "next/image";
 import RightIcon from "@/app/images/arrow-right.svg";
@@ -25,8 +26,12 @@ const InstitutionDetailsComponent = () => {
     dispatch(updateInstitutionDetails({ [name]: value }));
   };
 
-  const handleSubmit = () => {
+  const handleBack = () => router.back();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
     console.log("form data: ", institutionDetails);
+    router.push("/verification");
   };
 
   const institutionTypeOptions = [
@@ -45,6 +50,14 @@ const InstitutionDetailsComponent = () => {
     { label: "CBSE Board", value: "cbse board" },
     { label: "ICSE Board", value: "icse board" },
   ];
+
+  const employeesNumber = [
+    {label: "1", value: "1"},
+    {label: "2", value: "2"},
+    {label: "3", value: "3"},
+    {label: "4", value: "4"},
+    {label: "5", value: "5"},
+  ]
   return (
     <form onSubmit={handleSubmit}>
       <CustomSelect
@@ -105,25 +118,64 @@ const InstitutionDetailsComponent = () => {
       </Label>
 
       <input
+        type="text"
+        name="address1"
+        className={`text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border`}
+        value={institutionDetails.address1}
+        onChange={handleChange}
+        placeholder="Address line 2"
+      />
+
+      <div className="flex items-center gap-4 my-4">
+        <input
           type="text"
-          name="address1"
-          className={`text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border`}
-          value={institutionDetails.address1}
+          name="city"
+          className="text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border"
+          value={institutionDetails.city}
           onChange={handleChange}
-          placeholder="Address line 2"
+          placeholder="City"
         />
+        <input
+          type="text"
+          name="state"
+          className="text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border"
+          value={institutionDetails.state}
+          onChange={handleChange}
+          placeholder="State"
+        />
+        <input
+          type="text"
+          name="pincode"
+          className="text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border"
+          value={institutionDetails.pincode}
+          onChange={handleChange}
+          placeholder="Pincode"
+        />
+      </div>
 
-        <div className="flex items-center gap-4">
-            
-        </div>
+      <Dropdown
+        label="no. of employees"
+        options={employeesNumber}
+        value={institutionDetails.employeesNumber}
+        onChange={(value) => dispatch(setEmployeesNumber(value))}
+      />
 
-      <button
-        type="submit"
-        className="w-full flex items-center justify-center gap-3 bg-[#0A65CC] text-white text-[16px] font-bold px-[32px] py-[16px] rounded-[20px]"
-      >
-        Create Account{" "}
-        <Image src={RightIcon} width={24} height={24} alt="right icon" />
-      </button>
+      <div className="flex gap-6 my-6">
+        <button
+          type="button"
+          onClick={handleBack}
+          className="capitalize text-[16px] font-bold px-[32px] py-[16px] rounded-[20px] border border-[#0A65CC]"
+        >
+          back
+        </button>
+        <button
+          type="submit"
+          className="flex items-center justify-center gap-3 bg-[#0A65CC] text-white text-[16px] font-bold px-[32px] py-[16px] rounded-[20px]"
+        >
+          Create Account{" "}
+          <Image src={RightIcon} width={24} height={24} alt="right icon" />
+        </button>
+      </div>
     </form>
   );
 };

@@ -4,11 +4,11 @@ const initialState = {
   fname: "",
   lname: "",
   email: "",
-  selectedType: null,
+  selectedType: "",
   password: "",
   cpassword: "",
   mobile: "",
-  selectedGender: null,
+  selectedGender: "",
   terms: false,
   updates: false,
 };

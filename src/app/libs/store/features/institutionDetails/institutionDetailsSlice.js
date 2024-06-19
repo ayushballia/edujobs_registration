@@ -5,7 +5,13 @@ const initialState = {
   selectedSchoolName: [],
   schoolBoard: "",
   website: "",
-  address: ""
+  address: "",
+  address1: "",
+  designation: "",
+  city: "",
+  state: "",
+  pincode: "",
+  employeesNumber: ""
 };
 
 const institutionDetailsSlice = createSlice({
@@ -24,6 +30,9 @@ const institutionDetailsSlice = createSlice({
     setSchoolBoard: (state, action) => {
       state.schoolBoard = action.payload;
     },
+    setEmployeesNumber: (state, action) => {
+      state.employeesNumber = action.payload;
+    },
   },
 });
 
@@ -31,7 +40,8 @@ export const {
   updateInstitutionDetails,
   setSelectedInstitutionType,
   setSelectedSchoolName,
-  setSchoolBoard
+  setSchoolBoard,
+  setEmployeesNumber
 } = institutionDetailsSlice.actions;
 
 export default institutionDetailsSlice.reducer;

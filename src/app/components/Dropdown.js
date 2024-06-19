@@ -4,7 +4,7 @@ import { useState } from 'react';
 const Dropdown = ({ options, label, value, onChange }) => {
   return (
     <div className="w-full">
-      <label className="block text-gray-700 text-[18px] font-semibold mb-1">
+      <label className="capitalize block text-gray-700 text-[18px] font-semibold mb-1">
         {label}
       </label>
       <div className="relative">
