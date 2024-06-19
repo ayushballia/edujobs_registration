@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import Label from "./Label";
 import CustomSelect from "./CustomSelect";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,17 +9,19 @@ import {
   setSelectedInstitutionType,
   setSelectedSchoolName,
   setSchoolBoard,
-  setEmployeesNumber
+  setEmployeesNumber,
 } from "@/app/libs/store/features/institutionDetails/institutionDetailsSlice";
 import Image from "next/image";
 import RightIcon from "@/app/images/arrow-right.svg";
 import Dropdown from "./Dropdown";
+import CustomInput from "./CustomInput";
 
 const InstitutionDetailsComponent = () => {
   const dispatch = useDispatch();
   const institutionDetails = useSelector((state) => state.institutionDetails);
 
   const router = useRouter();
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,21 +30,77 @@ const InstitutionDetailsComponent = () => {
 
   const handleBack = () => router.back();
 
+  const validateInputs = () => {
+    const newErrors = {};
+    let errorMessages = "";
+
+    if (!institutionDetails.selectedInstitutionType) {
+      newErrors.selectedInstitutionType = "Institution type is required";
+      errorMessages += "Institution type is required.\n";
+    }
+    if (!institutionDetails.selectedSchoolName) {
+      newErrors.selectedSchoolName = "School name is required";
+      errorMessages += "School name is required.\n";
+    }
+    if (!institutionDetails.schoolBoard) {
+      newErrors.schoolBoard = "School board is required";
+      errorMessages += "School board is required.\n";
+    }
+    if (!institutionDetails.designation) {
+      newErrors.designation = "Designation is required";
+      errorMessages += "Designation is required.\n";
+    }
+    if (!institutionDetails.website) {
+      newErrors.website = "School website is required";
+      errorMessages += "School website is required.\n";
+    }
+    if (!institutionDetails.address) {
+      newErrors.address = "Address is required";
+      errorMessages += "Address is required.\n";
+    }
+    if (!institutionDetails.city) {
+      newErrors.city = "City is required";
+      errorMessages += "City is required.\n";
+    }
+    if (!institutionDetails.state) {
+      newErrors.state = "State is required";
+      errorMessages += "State is required.\n";
+    }
+    if (!institutionDetails.pincode) {
+      newErrors.pincode = "Pincode is required";
+      errorMessages += "Pincode is required.\n";
+    }
+    if (!institutionDetails.employeesNumber) {
+      newErrors.employeesNumber = "Number of employees is required";
+      errorMessages += "Number of employees is required.\n";
+    }
+
+    return { newErrors, errorMessages };
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("form data: ", institutionDetails);
-    router.push("/verification");
+    const { newErrors, errorMessages } = validateInputs();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      alert(errorMessages);
+    } else {
+      setErrors({});
+      console.log("Form Data:", institutionDetails);
+      router.push("/verification");
+    }
   };
 
   const institutionTypeOptions = [
     { label: "School", value: "school" },
     { label: "Coaching", value: "coaching" },
-    { label: "Collage", value: "collage" },
+    { label: "College", value: "college" },
     { label: "University", value: "university" },
   ];
+
   const schoolNameOptions = [
-    { label: "Delhi public school", value: "dps" },
-    { label: "St. xavier's school", value: "sxs" },
+    { label: "Delhi Public School", value: "dps" },
+    { label: "St. Xavier's School", value: "sxs" },
   ];
 
   const boardOptions = [
@@ -52,112 +110,113 @@ const InstitutionDetailsComponent = () => {
   ];
 
   const employeesNumber = [
-    {label: "1", value: "1"},
-    {label: "2", value: "2"},
-    {label: "3", value: "3"},
-    {label: "4", value: "4"},
-    {label: "5", value: "5"},
-  ]
+    { label: "1", value: "1" },
+    { label: "2", value: "2" },
+    { label: "3", value: "3" },
+    { label: "4", value: "4" },
+    { label: "5", value: "5" },
+  ];
+
   return (
     <form onSubmit={handleSubmit}>
       <CustomSelect
-        label={"institution type"}
-        placeholder={"select institution type"}
+        label={"Institution Type"}
+        placeholder={"Select institution type"}
         options={institutionTypeOptions}
         selectedInstitutionType={institutionDetails.selectedInstitutionType}
         value={institutionDetails.selectedInstitutionType}
         onChange={(types) => dispatch(setSelectedInstitutionType(types))}
+        error={errors.selectedInstitutionType}
       />
       <CustomSelect
-        label={"school name"}
-        placeholder={"select institution type"}
+        label={"School Name"}
+        placeholder={"Select school name"}
         options={schoolNameOptions}
         selectedInstitutionType={institutionDetails.selectedSchoolName}
         value={institutionDetails.selectedSchoolName}
         onChange={(types) => dispatch(setSelectedSchoolName(types))}
+        error={errors.selectedSchoolName}
       />
 
       <Dropdown
-        label="school board"
+        label="School Board"
         options={boardOptions}
         value={institutionDetails.schoolBoard}
         onChange={(value) => dispatch(setSchoolBoard(value))}
+        error={errors.schoolBoard}
       />
 
-      <Label title="your designation">
-        <input
-          type="text"
+      <Label title="Your Designation" error={errors.designation}>
+        <CustomInput
           name="designation"
-          className={`text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border`}
           value={institutionDetails.designation}
           onChange={handleChange}
-          placeholder="Enter your designation"
+          error={errors.designation}
         />
       </Label>
 
-      <Label title="school website">
-        <input
-          type="text"
+      <Label title="School Website" error={errors.website}>
+        <CustomInput
           name="website"
-          className={`text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border`}
           value={institutionDetails.website}
           onChange={handleChange}
-          placeholder="Enter your school website"
+          error={errors.website}
         />
       </Label>
 
-      <Label title="school address">
-        <input
-          type="text"
+      <Label title="School Address" error={errors.address}>
+        <CustomInput
           name="address"
-          className={`text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border`}
           value={institutionDetails.address}
           onChange={handleChange}
-          placeholder="Address line 1"
+          error={errors.address}
         />
       </Label>
 
-      <input
-        type="text"
-        name="address1"
-        className={`text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border`}
-        value={institutionDetails.address1}
-        onChange={handleChange}
-        placeholder="Address line 2"
-      />
+      <Label title="Additional Address Line">
+        <input
+          type="text"
+          name="address1"
+          className={`text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border`}
+          value={institutionDetails.address1}
+          onChange={handleChange}
+          placeholder="Address line 2"
+        />
+      </Label>
 
       <div className="flex items-center gap-4 my-4">
-        <input
-          type="text"
-          name="city"
-          className="text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border"
-          value={institutionDetails.city}
-          onChange={handleChange}
-          placeholder="City"
-        />
-        <input
-          type="text"
-          name="state"
-          className="text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border"
-          value={institutionDetails.state}
-          onChange={handleChange}
-          placeholder="State"
-        />
-        <input
-          type="text"
-          name="pincode"
-          className="text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border"
-          value={institutionDetails.pincode}
-          onChange={handleChange}
-          placeholder="Pincode"
-        />
+        <Label title="City" error={errors.city}>
+          <CustomInput
+            name="city"
+            value={institutionDetails.city}
+            onChange={handleChange}
+            error={errors.city}
+          />
+        </Label>
+        <Label title="State" error={errors.state}>
+          <CustomInput
+            name="state"
+            value={institutionDetails.state}
+            onChange={handleChange}
+            error={errors.state}
+          />
+        </Label>
+        <Label title="Pincode" error={errors.pincode}>
+          <CustomInput
+            name="pincode"
+            value={institutionDetails.pincode}
+            onChange={handleChange}
+            error={errors.pincode}
+          />
+        </Label>
       </div>
 
       <Dropdown
-        label="no. of employees"
+        label="No. of Employees"
         options={employeesNumber}
         value={institutionDetails.employeesNumber}
         onChange={(value) => dispatch(setEmployeesNumber(value))}
+        error={errors.employeesNumber}
       />
 
       <div className="flex gap-6 my-6">
@@ -166,7 +225,7 @@ const InstitutionDetailsComponent = () => {
           onClick={handleBack}
           className="capitalize text-[16px] font-bold px-[32px] py-[16px] rounded-[20px] border border-[#0A65CC]"
         >
-          back
+          Back
         </button>
         <button
           type="submit"

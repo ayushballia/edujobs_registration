@@ -17,8 +17,7 @@ import {
   setUpdates,
 } from "@/app/libs/store/features/contactInfo/contactInfoSlice";
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import CustomInput from "./CustomInput";
 
 const genderOptions = [
   { label: "Male", icon: MaleIcon },
@@ -27,27 +26,6 @@ const genderOptions = [
 ];
 
 const type = ["institution", "Consultant"];
-
-const CustomInput = ({ name, type = "text", value, onChange, error }) => (
-  <div className="relative w-full">
-    <input
-      type={type}
-      name={name}
-      className={`text-[14px] p-[16px] text-[14px] font-normal w-full rounded-[15px] border ${
-        error ? "border-red-500" : "border-gray-300"
-      }`}
-      value={value}
-      onChange={onChange}
-    />
-    {error && (
-      <FontAwesomeIcon
-        color="red"
-        icon={faExclamationCircle}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2"
-      />
-    )}
-  </div>
-);
 
 const ContactInfoComponent = () => {
   const dispatch = useDispatch();
@@ -106,6 +84,15 @@ const ContactInfoComponent = () => {
       errorMessages += "Gender is required.\n";
     }
 
+    if (!contactInfo.terms) {
+      newErrors.terms = "You must agree to the terms";
+      errorMessages += "You must agree to the terms.\n";
+    }
+    if (!contactInfo.updates) {
+      newErrors.updates = "You must agree to receive updates";
+      errorMessages += "You must agree to receive updates.\n";
+    }
+
     return { newErrors, errorMessages };
   };
 
@@ -153,13 +140,13 @@ const ContactInfoComponent = () => {
       </div>
 
       <Label title={"email address"}>
-      <CustomInput
-            name="email"
-            type="email"
-            value={contactInfo.email}
-            onChange={handleChange}
-            error={errors.email}
-          />
+        <CustomInput
+          name="email"
+          type="email"
+          value={contactInfo.email}
+          onChange={handleChange}
+          error={errors.email}
+        />
       </Label>
 
       <Label title={"you are"}>
@@ -171,33 +158,33 @@ const ContactInfoComponent = () => {
       </Label>
 
       <Label title={"password"}>
-      <CustomInput
-            name="password"
-            type="password"
-            value={contactInfo.password}
-            onChange={handleChange}
-            error={errors.password}
-          />
+        <CustomInput
+          name="password"
+          type="password"
+          value={contactInfo.password}
+          onChange={handleChange}
+          error={errors.password}
+        />
       </Label>
 
       <Label title={"confirm password"}>
-      <CustomInput
-            name="cpassword"
-            type="password"
-            value={contactInfo.cpassword}
-            onChange={handleChange}
-            error={errors.cpassword}
-          />
+        <CustomInput
+          name="cpassword"
+          type="password"
+          value={contactInfo.cpassword}
+          onChange={handleChange}
+          error={errors.cpassword}
+        />
       </Label>
 
       <Label title={"mobile number"}>
-      <CustomInput
-            name="mobile"
-            type="tel"
-            value={contactInfo.mobile}
-            onChange={handleChange}
-            error={errors.mobile}
-          />
+        <CustomInput
+          name="mobile"
+          type="tel"
+          value={contactInfo.mobile}
+          onChange={handleChange}
+          error={errors.mobile}
+        />
       </Label>
 
       <Label title={"gender"}>
@@ -212,19 +199,21 @@ const ContactInfoComponent = () => {
           type="checkbox"
           name="terms"
           id="terms"
-          className={`rounded ${
+          className={`rounded border ${
             errors.terms ? "border-red-500" : "border-gray-300"
           }`}
           checked={contactInfo.terms}
           onChange={(e) => dispatch(setTerms(e.target.checked))}
         />
         <p
-          className={`text-[14px] text-[#767F8C] font-normal  ${
-            errors.terms ? "text-[#0A65CC]" : "text-red-500"
+          className={`text-[14px] font-normal ${
+            errors.terms ? "text-red-500" : "text-[#767F8C"
           }`}
         >
           I&apos;ve read and agree with your{" "}
-          <sapn className={`text-[#0A65CC]`}>
+          <sapn
+            className={`${errors.terms ? "text-red-700" : "text-[#0A65CC]"}`}
+          >
             {" "}
             Terms of Services & Privacy Policies of EducationJobs
           </sapn>
@@ -236,13 +225,15 @@ const ContactInfoComponent = () => {
           type="checkbox"
           name="updates"
           id="updates"
-          className={`rounded ${errors.updates ? "" : "border-red-500"}`}
+          className={`rounded border ${
+            errors.updates ? "border-red-500" : "border-gray-300"
+          }`}
           checked={contactInfo.updates}
           onChange={(e) => dispatch(setUpdates(e.target.checked))}
         />
         <p
           className={`text-[14px] font-normal ${
-            errors.updates ? "text-[#767F8C] " : "text-red-500"
+            errors.updates ? "text-red-500" : "text-[#767F8C"
           }`}
         >
           Send me important updates & promotions via SMS, email, and WhatsApp
