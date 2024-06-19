@@ -152,6 +152,7 @@ const InstitutionDetailsComponent = () => {
           value={institutionDetails.designation}
           onChange={handleChange}
           error={errors.designation}
+          placeholder="designation"
         />
       </Label>
 
@@ -161,6 +162,7 @@ const InstitutionDetailsComponent = () => {
           value={institutionDetails.website}
           onChange={handleChange}
           error={errors.website}
+          placeholder="designation"
         />
       </Label>
 
@@ -170,6 +172,7 @@ const InstitutionDetailsComponent = () => {
           value={institutionDetails.address}
           onChange={handleChange}
           error={errors.address}
+          placeholder="designation"
         />
       </Label>
 
